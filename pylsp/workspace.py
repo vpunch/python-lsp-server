@@ -41,6 +41,7 @@ class Workspace:
     M_INITIALIZE_PROGRESS = "window/workDoneProgress/create"
     M_APPLY_EDIT = "workspace/applyEdit"
     M_SHOW_MESSAGE = "window/showMessage"
+    M_LOG_MESSAGE = "window/logMessage"
 
     def __init__(self, root_uri, endpoint, config=None):
         self._config = config
@@ -322,6 +323,11 @@ class Workspace:
                 "token": token,
                 "value": value,
             },
+        )
+
+    def log_message(self, message, msg_type=lsp.MessageType.Info):
+        self._endpoint.notify(
+            self.M_LOG_MESSAGE, params={"type": msg_type, "message": message}
         )
 
     def show_message(self, message, msg_type=lsp.MessageType.Info):
