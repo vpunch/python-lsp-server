@@ -88,7 +88,7 @@ def find_parents(root, path, names):
         return []
 
     if not os.path.commonprefix((root, path)):
-        log.warning("Path %s not in %s", path, root)
+        log.warning("Path %r not in %r", path, root)
         return []
 
     # Split the relative by directory, generate all the parent directories, then check each of them.
@@ -175,8 +175,8 @@ def escape_plain_text(contents: str) -> str:
     """
     Format plain text to display nicely in environments which do not respect whitespaces.
     """
-    contents = contents.replace("\t", "\u00A0" * 4)
-    contents = contents.replace("  ", "\u00A0" * 2)
+    contents = contents.replace("\t", "\u00a0" * 4)
+    contents = contents.replace("  ", "\u00a0" * 2)
     return contents
 
 

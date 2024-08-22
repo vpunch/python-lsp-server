@@ -3,6 +3,7 @@
 # Copyright 2021- Python Language Server Contributors.
 
 """Linter plugin for pylint."""
+
 import collections
 import logging
 import os
@@ -150,7 +151,11 @@ class PylintLinter:
                     "line": line,
                     # It's possible that we're linting an empty file. Even an empty
                     # file might fail linting if it isn't named properly.
-                    "character": len(document.lines[line]) if document.lines else 0,
+                    "character": (
+                        _find_end_of_identifier(document.lines[line], diag["column"])
+                        if document.lines
+                        else 0
+                    ),
                 },
             }
 
@@ -337,8 +342,9 @@ def _parse_pylint_stdio_result(document, stdout):
                 "start": {"line": line, "character": character},
                 "end": {
                     "line": line,
-                    # no way to determine the column
-                    "character": len(document.lines[line]) - 1,
+                    "character": _find_end_of_identifier(
+                        document.lines[line], character
+                    ),
                 },
             },
             "message": msg,
@@ -351,3 +357,11 @@ def _parse_pylint_stdio_result(document, stdout):
         diagnostics.append(diagnostic)
 
     return diagnostics
+
+
+def _find_end_of_identifier(string, start):
+    """Find the end of the identifier starting at the given position."""
+    for i in range(len(string), start, -1):
+        if string[start:i].isidentifier():
+            return i
+    return len(string) - 1

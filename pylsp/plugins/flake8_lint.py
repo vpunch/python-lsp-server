@@ -2,6 +2,7 @@
 # Copyright 2021- Python Language Server Contributors.
 
 """Linter pluging for flake8"""
+
 import logging
 import os.path
 import re
@@ -71,6 +72,7 @@ def pylsp_lint(workspace, document):
             "config": settings.get("config"),
             "exclude": settings.get("exclude"),
             "extend-ignore": settings.get("extendIgnore"),
+            "extend-select": settings.get("extendSelect"),
             "filename": settings.get("filename"),
             "hang-closing": settings.get("hangClosing"),
             "ignore": ignores or None,
